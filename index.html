@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#7c5cff">
+<title>Money Note</title>
+<style>
+:root{--bg:#f6f4ff;--card:#fff;--text:#25233a;--muted:#8b899b;--purple:#7c5cff;--purple2:#a18cff;--green:#1ca66b;--red:#ef5b67;--line:#eeeaf8}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#eeeaff 0,#f8f7fc 35%,#f8f7fc 100%);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text)}.app{max-width:520px;margin:auto;padding:18px 16px 35px}
+.top{display:flex;justify-content:space-between;align-items:center;margin:5px 2px 16px}.brand{display:flex;gap:11px;align-items:center}.logo{width:45px;height:45px;border-radius:15px;background:linear-gradient(135deg,var(--purple),var(--purple2));display:grid;place-items:center;color:#fff;font-size:23px;box-shadow:0 8px 20px #7c5cff35}.brand h1{font-size:22px;margin:0}.brand p{font-size:12px;color:var(--muted);margin:2px 0 0}.pill{font-size:12px;color:var(--purple);background:#fff;padding:8px 11px;border-radius:20px;box-shadow:0 5px 15px #00000009}
+.balance{background:linear-gradient(135deg,#7150ee,#9b86ff);color:white;border-radius:25px;padding:22px;box-shadow:0 14px 30px #7c5cff35;margin-bottom:15px}.balance .label{opacity:.8;font-size:13px}.balance .money{font-size:35px;font-weight:800;margin:5px 0 15px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:#ffffff22;border:1px solid #ffffff2b;padding:11px 12px;border-radius:16px}.stat small{display:block;opacity:.8}.stat b{font-size:16px}.green{color:var(--green)}.red{color:var(--red)}
+.card{background:var(--card);border-radius:22px;padding:18px;margin:14px 0;box-shadow:0 7px 24px #25233a0a}.card-title{font-weight:800;font-size:17px;margin-bottom:13px}
+label{display:block;font-size:12px;font-weight:700;color:#6e6b7e;margin:10px 0 6px}input,select{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:#fbfaff;font-size:15px;outline:none;color:var(--text)}input:focus,select:focus{border-color:#a899ff;box-shadow:0 0 0 3px #7c5cff12}
+.types{display:grid;grid-template-columns:1fr 1fr;gap:9px}.types label{margin:0}.types input{display:none}.types span{display:block;text-align:center;padding:12px;border:1px solid var(--line);border-radius:13px;color:#777}.types input:checked+span{border-color:var(--purple);background:#f1edff;color:var(--purple);font-weight:800}
+button{border:0;border-radius:14px;padding:13px;width:100%;font-size:15px;font-weight:800;cursor:pointer}.add{background:linear-gradient(135deg,var(--purple),#9a85ff);color:white;box-shadow:0 9px 18px #7c5cff28;margin-top:15px}.headrow{display:flex;justify-content:space-between;align-items:center}.clear{width:auto;background:#f3f1f8;color:#777;padding:8px 10px;font-size:12px}
+.item{display:flex;align-items:center;gap:11px;padding:13px 0;border-bottom:1px solid var(--line)}.item:last-child{border-bottom:0}.icon{width:42px;height:42px;border-radius:14px;background:#f3f0ff;display:grid;place-items:center;font-size:19px;flex:none}.info{flex:1;min-width:0}.name{font-weight:750;font-size:14px}.meta{font-size:11px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.amt{text-align:right;font-weight:800;font-size:14px}.del{background:none;color:#aaa;padding:3px;width:auto;font-size:11px;margin-top:2px}.empty{text-align:center;padding:24px;color:#aaa;font-size:13px}
+.note{text-align:center;color:#999;font-size:11px;margin-top:13px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="brand"><div class="logo">฿</div><div><h1>Money Note</h1><p>บันทึกเงินของคุณแบบง่าย ๆ</p></div></div>
+    <div class="pill">✨ พร้อมใช้งาน</div>
+  </div>
+
+  <section class="balance">
+    <div class="label">ยอดคงเหลือ</div>
+    <div class="money" id="balance">฿0.00</div>
+    <div class="stats">
+      <div class="stat"><small>↗ รายรับ</small><b id="income">฿0.00</b></div>
+      <div class="stat"><small>↘ รายจ่าย</small><b id="expense">฿0.00</b></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-title">➕ เพิ่มรายการ</div>
+    <label>ประเภท</label>
+    <div class="types">
+      <label><input type="radio" name="type" value="expense" checked><span>💸 รายจ่าย</span></label>
+      <label><input type="radio" name="type" value="income"><span>💰 รายรับ</span></label>
+    </div>
+    <label>รายการ</label><input id="name" placeholder="เช่น ข้าวกลางวัน / เงินเดือน">
+    <label>จำนวนเงิน</label><input id="amount" type="number" min="0" step="0.01" placeholder="0.00">
+    <label>หมวดหมู่</label>
+    <select id="category"><option>อาหาร</option><option>เดินทาง</option><option>ของใช้</option><option>เรียน</option><option>บันเทิง</option><option>เงินเดือน</option><option>อื่น ๆ</option></select>
+    <label>วันที่</label><input id="date" type="date">
+    <label>หมายเหตุ <span style="font-weight:400;color:#aaa">(ไม่บังคับ)</span></label><input id="note" placeholder="รายละเอียดเพิ่มเติม">
+    <button class="add" onclick="addItem()">บันทึกรายการ</button>
+  </section>
+
+  <section class="card">
+    <div class="headrow"><div class="card-title" style="margin:0">📋 รายการล่าสุด</div><button class="clear" onclick="clearAll()">ล้างทั้งหมด</button></div>
+    <div id="list"></div>
+  </section>
+  <div class="note">ข้อมูลจะถูกบันทึกไว้ในอุปกรณ์เครื่องนี้โดยอัตโนมัติ 🔒</div>
+</div>
+
+<script>
+const KEY="money_note_pretty_v2";let data=JSON.parse(localStorage.getItem(KEY)||"[]");
+const $=id=>document.getElementById(id);
+$("date").value=new Date().toISOString().slice(0,10);
+function money(n){return new Intl.NumberFormat("th-TH",{style:"currency",currency:"THB"}).format(n)}
+const icons={อาหาร:"🍜",เดินทาง:"🚗",ของใช้:"🛍️",เรียน:"📚",บันเทิง:"🎮",เงินเดือน:"💰","อื่น ๆ":"📌"};
+function addItem(){
+ const name=$("name").value.trim(),amount=Number($("amount").value);
+ if(!name||amount<=0){alert("กรุณากรอกรายการและจำนวนเงิน");return}
+ const type=document.querySelector('input[name="type"]:checked').value;
+ data.unshift({id:Date.now(),name,amount,type,category:$("category").value,date:$("date").value,note:$("note").value.trim()});
+ $("name").value="";$("amount").value="";$("note").value="";save();
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function removeItem(id){data=data.filter(x=>x.id!==id);save()}
+function clearAll(){if(data.length&&confirm("ลบรายการทั้งหมดใช่ไหม?")){data=[];save()}}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function render(){
+ const inc=data.filter(x=>x.type==="income").reduce((a,x)=>a+x.amount,0),exp=data.filter(x=>x.type==="expense").reduce((a,x)=>a+x.amount,0);
+ $("income").textContent=money(inc);$("expense").textContent=money(exp);$("balance").textContent=money(inc-exp);
+ $("list").innerHTML=data.length?data.map(x=>`<div class="item"><div class="icon">${icons[x.category]||"📌"}</div><div class="info"><div class="name">${esc(x.name)}</div><div class="meta">${esc(x.category)} · ${x.date}${x.note?" · "+esc(x.note):""}</div></div><div><div class="amt ${x.type==="income"?"green":"red"}">${x.type==="income"?"+":"-"}${money(x.amount)}</div><button class="del" onclick="removeItem(${x.id})">ลบ</button></div></div>`).join(""):'<div class="empty">ยังไม่มีรายการ<br>กด “บันทึกรายการ” เพื่อเริ่มต้น ✨</div>';
+}
+render();
+</script>
+</body></html>
